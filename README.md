@@ -10,7 +10,7 @@ Tests support for and wraps file input to style and surface filename
 [https://mjbp.github.io/storm-file-input](https://mjbp.github.io/storm-file-input)
 
 ##Usage
-Wrap a file input to display the filename(s):
+Test support, then wrap a file input to display the filename(s):
 
 HTML
 ```
@@ -36,25 +36,6 @@ Load('/content/js/async/storm-file-input.standalone.js')
     .then(() => {
         FileInput.init('input[type=file]');
     });
-```
-
-
-Test for file input support and add className 'no--fileinput' if none:
-
-HTML
-```
-<div>
-    <input type="file" name="f" id="f" multiple>
-</div>
-```
-JS
-```
-npm i -S storm-file-input
-```
-```
-import FileInput from 'storm-file-input';
-
-FileInput.test('input[type=file]');
 ```
 
 ##Tests

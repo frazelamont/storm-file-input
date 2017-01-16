@@ -1,6 +1,6 @@
 /**
  * @name storm-file-input: Tests support for and wraps file input to style and surface filename
- * @version 0.1.1: Mon, 16 Jan 2017 17:04:51 GMT
+ * @version 0.1.1: Mon, 16 Jan 2017 17:12:12 GMT
  * @author stormid
  * @license MIT
  */
