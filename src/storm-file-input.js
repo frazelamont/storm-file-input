@@ -1,58 +1,51 @@
-(function (root, factory) {
-    if (typeof exports === 'object') {
-        module.exports = factory();
-    } else {
-        root.StormFileInput = factory();
-    }
-}(this, function () {
-    'use strict';
+const defaults = {
+	message: '',
+	fileClassName: 'filename',
+	noSupportClassName: 'no--fileinput'
+};
 
-    function test() {
-        var isFileInputSupported = (function () {
-            var ua = window.navigator.userAgent;
-            if (!!ua.match(/(Android (1.0|1.1|1.5|1.6|2.0|2.1))|(Windows Phone (OS 7|8.0))|(XBLWP)|(ZuneWP)|(w(eb)?OSBrowser)|(webOS)|(Kindle\/(1.0|2.0|2.5|3.0))/)) {
-                return false;
-            }
-            if ((!!ua.match(/iPad/i) || !!ua.match(/iPhone/i)) || !!ua.match(/CriOS/i)) {
-                return false;
-            }
-            var el = document.createElement('input');
-            el.type = 'file';
-            return !el.disabled;
-        })();
+export const test = () => {
+	var isFileInputSupported = (function () {
+		var ua = window.navigator.userAgent;
+		if (ua.match(/(Android (1.0|1.1|1.5|1.6|2.0|2.1))|(Windows Phone (OS 7|8.0))|(XBLWP)|(ZuneWP)|(w(eb)?OSBrowser)|(webOS)|(Kindle\/(1.0|2.0|2.5|3.0))/)) {
+			return false;
+		}
+		if ((!!ua.match(/iPad/i) || !!ua.match(/iPhone/i)) || !!ua.match(/CriOS/i)) {
+			return false;
+		}
+		var el = document.createElement('input');
+		el.type = 'file';
+		return !el.disabled;
+	})();
 
-        if (!isFileInputSupported) {
-            document.documentElement.classList.add('no-fileinput');
-            return false;
-        }
-        return true;
-    }
+	if (isFileInputSupported) return true;
+	
+	document.documentElement.classList.add(defaults.noSupportClassName);
+	return false;
+	
+};
 
-    function init() {
-        if (!test()) { return; }
-        var fileUploads = document.querySelectorAll('input[type=file]'),
-            defaultMessage = '';
+const init = sel => {
+	let els = [].slice.call(document.querySelectorAll(sel));
 
-        if (!!!fileUploads.length) { return; }
+	if(!els.length) throw new Error('File input cannot be initialised, no inputs found');
+	
+	if (!test()) return;
 
-        [].slice.call(fileUploads).forEach(function (r) {
-            var fileNameHolder = document.createElement('span'),
-                ref;
-            fileNameHolder.className = 'form-file-name';
-            ref = r.parentNode.parentNode.appendChild(fileNameHolder);
-            ref.innerHTML = '';
-            r.addEventListener('change', function (e) {
-                var fileNameContent = r.value.replace(/^.*[\\\/]/, '') === '' ? defaultMessage : r.files ? [].slice.call(r.files).reduce(function (previous, current) {
-                        return [previous, current.name].join(' ');
-                    }, 'Selected file(s): ') : 'Selected file: ' + r.value.replace(/^.*[\\\/]/, '');
-                ref.innerHTML = fileNameContent;
-            }, true);
-        });
-    }
+	[].slice.call(els).forEach(input => {
+		let fileNameHolder = document.createElement('span'),
+			ref;
 
-    return {
-        init: init,
-        test: test
-    };
+		fileNameHolder.className = defaults.fileClassName;
+		ref = input.parentNode.appendChild(fileNameHolder);
+		ref.innerHTML = '';
+		input.addEventListener('change', () => {
+			let fileNameContent = input.value.replace(/^.*[\\\/]/, '') === '' ? defaults.message : input.files ? [].slice.call(input.files).reduce((accumulator, current) => {
+				return [accumulator, current.name].join(' ');
+			}, 'Selected file(s): ') : 'Selected file: ' + input.value.replace(/^.*[\\\/]/, '');
+			ref.innerHTML = fileNameContent;
+		});
+	});
+};
 
-}));
+export default { init };
