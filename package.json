@@ -1,6 +1,6 @@
 {
   "name": "storm-file-input",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Tests support for and wraps file input to style and display filename",
   "author": "stormid",
   "license": "MIT",
